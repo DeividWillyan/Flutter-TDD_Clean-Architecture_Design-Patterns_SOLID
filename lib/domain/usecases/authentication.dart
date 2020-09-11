@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:meta/meta.dart';
 
 import '../entities/entities.dart';
@@ -14,4 +16,6 @@ class AuthenticationParams {
     @required this.email,
     @required this.password,
   });
+
+  Map<String, dynamic> toMap() => {'email': email, 'password': password};
 }
