@@ -10,12 +10,10 @@ abstract class Authentication {
 
 class AuthenticationParams {
   final String email;
-  final String password;
+  final String secret;
 
   AuthenticationParams({
     @required this.email,
-    @required this.password,
+    @required this.secret,
   });
-
-  Map<String, dynamic> toMap() => {'email': email, 'password': password};
 }
