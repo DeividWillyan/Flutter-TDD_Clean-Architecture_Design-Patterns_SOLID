@@ -45,10 +45,14 @@ class LoginPage extends StatelessWidget {
                     onChanged: presenter.validatePassword,
                   );
                 }),
-            RaisedButton(
-              onPressed: null,
-              child: Text('Login'),
-            ),
+            StreamBuilder<bool>(
+                stream: presenter.isValidFormStream,
+                builder: (context, snapshot) {
+                  return RaisedButton(
+                    onPressed: snapshot.data == true ? () {} : null,
+                    child: Text('Login'),
+                  );
+                }),
             FlatButton(
               onPressed: () {},
               child: Text('Registro'),
