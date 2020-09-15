@@ -153,4 +153,16 @@ void main() {
         find.byWidgetPredicate((widget) => widget is RaisedButton && (widget.child as Text).data == 'Login'));
     expect(loginButton.onPressed, isNotNull);
   });
+
+  testWidgets('Should disable button if form is not valid', (WidgetTester tester) async {
+    final loginPage = MaterialApp(home: LoginPage(presenter));
+    await tester.pumpWidget(loginPage);
+
+    isFormValidController.add(false);
+    await tester.pump();
+
+    final loginButton = tester.widget<RaisedButton>(
+        find.byWidgetPredicate((widget) => widget is RaisedButton && (widget.child as Text).data == 'Login'));
+    expect(loginButton.onPressed, isNull);
+  });
 }
