@@ -30,6 +30,8 @@ class HttpAdpter implements HttpClient {
       throw HttpError.unauthorized;
     } else if (response.statusCode == 403) {
       throw HttpError.forbidden;
+    } else if (response.statusCode == 404) {
+      throw HttpError.notFound;
     } else {
       throw HttpError.serverError;
     }
