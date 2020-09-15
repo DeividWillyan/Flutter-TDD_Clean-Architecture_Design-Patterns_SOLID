@@ -22,7 +22,7 @@ class App extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: LoginPage(null),
     );
   }
 }
