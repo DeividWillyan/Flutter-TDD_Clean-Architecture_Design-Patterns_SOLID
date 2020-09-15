@@ -21,14 +21,14 @@ class LoginPage extends StatelessWidget {
             ),
             TextField(
               decoration: InputDecoration(
-                hintText: 'password',
+                hintText: 'Password',
                 icon: Icon(
                   Icons.lock,
                 ),
               ),
             ),
             RaisedButton(
-              onPressed: () {},
+              onPressed: null,
               child: Text('Login'),
             ),
             FlatButton(
