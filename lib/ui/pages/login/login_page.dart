@@ -17,15 +17,20 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Login'),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'User',
-                icon: Icon(
-                  Icons.email,
-                ),
-              ),
-              onChanged: presenter.validateEmail,
-            ),
+            StreamBuilder<String>(
+                stream: presenter.emailErrorStream,
+                builder: (context, snapshot) {
+                  return TextField(
+                    decoration: InputDecoration(
+                      hintText: 'User',
+                      errorText: snapshot.data,
+                      icon: Icon(
+                        Icons.email,
+                      ),
+                    ),
+                    onChanged: presenter.validateEmail,
+                  );
+                }),
             TextField(
               decoration: InputDecoration(
                 hintText: 'Password',
