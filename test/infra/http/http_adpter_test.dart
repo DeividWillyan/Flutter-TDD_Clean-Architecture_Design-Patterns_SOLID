@@ -19,6 +19,14 @@ void main() {
     url = faker.internet.httpUrl();
   });
 
+  group('global', () {
+    test('Should throw ServerError if invalid method is provided', () async {
+      final future = sut.request(url: url, method: 'invalid_method');
+
+      expect(future, throwsA(HttpError.serverError));
+    });
+  });
+
   group('post', () {
     PostExpectation mockRequest() => when(client.post(any, body: anyNamed('body'), headers: anyNamed('headers')));
     void mockResponse(int statusCode, {String body = '{"any_key":"any_value"}'}) {
