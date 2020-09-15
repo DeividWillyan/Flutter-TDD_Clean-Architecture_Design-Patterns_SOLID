@@ -19,7 +19,15 @@ class HttpAdpter implements HttpClient {
     return _handleResponse(response);
   }
 
-  Map _handleResponse(Response response) => response.statusCode == 200
-      ? response.body.isEmpty ? null : jsonDecode(response.body)
-      : response.statusCode == 204 ? null : throw HttpError.badRequest;
+  Map _handleResponse(Response response) {
+    if (response.statusCode == 200) {
+      return response.body.isEmpty ? null : jsonDecode(response.body);
+    } else if (response.statusCode == 204) {
+      return null;
+    } else if (response.statusCode == 400) {
+      throw HttpError.badRequest;
+    } else {
+      throw HttpError.serverError;
+    }
+  }
 }
