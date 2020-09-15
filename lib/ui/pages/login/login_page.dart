@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
                   return TextField(
                     decoration: InputDecoration(
                       hintText: 'User',
-                      errorText: snapshot.data,
+                      errorText: snapshot?.data?.isEmpty == true ? null : snapshot.data,
                       icon: Icon(
                         Icons.email,
                       ),
@@ -31,15 +31,20 @@ class LoginPage extends StatelessWidget {
                     onChanged: presenter.validateEmail,
                   );
                 }),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Password',
-                icon: Icon(
-                  Icons.lock,
-                ),
-              ),
-              onChanged: presenter.validatePassword,
-            ),
+            StreamBuilder<String>(
+                stream: presenter.passwordErrorStream,
+                builder: (context, snapshot) {
+                  return TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      errorText: snapshot?.data?.isEmpty == true ? null : snapshot.data,
+                      icon: Icon(
+                        Icons.lock,
+                      ),
+                    ),
+                    onChanged: presenter.validatePassword,
+                  );
+                }),
             RaisedButton(
               onPressed: null,
               child: Text('Login'),
