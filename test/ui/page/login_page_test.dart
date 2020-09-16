@@ -139,7 +139,8 @@ void main() {
     passwordErrorController.add('');
     await tester.pump();
 
-    expect(find.descendant(of: find.bySemanticsLabel('Password'), matching: find.byType(Text)), findsOneWidget);
+    expect(
+        find.descendant(of: find.bySemanticsLabel('Password'), matching: find.byType(Text)), findsOneWidget);
   });
 
   testWidgets('Should enable button if form is valid', (WidgetTester tester) async {
@@ -164,5 +165,22 @@ void main() {
     final loginButton = tester.widget<RaisedButton>(
         find.byWidgetPredicate((widget) => widget is RaisedButton && (widget.child as Text).data == 'Login'));
     expect(loginButton.onPressed, isNull);
+  });
+
+  testWidgets('Should call authentication on form submit', (WidgetTester tester) async {
+    final loginPage = MaterialApp(home: LoginPage(presenter));
+    await tester.pumpWidget(loginPage);
+
+    isFormValidController.add(true);
+    await tester.pump();
+
+    final btnLogin = find.byWidgetPredicate((widget) =>
+        widget is RaisedButton && (widget.child as Text).data == 'Login' && widget.onPressed != null);
+    expect(btnLogin, findsOneWidget);
+
+    await tester.tap(btnLogin);
+    await tester.pump();
+
+    verify(presenter.auth()).called(1);
   });
 }
