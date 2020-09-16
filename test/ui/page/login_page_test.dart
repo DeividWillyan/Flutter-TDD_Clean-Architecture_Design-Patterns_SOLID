@@ -17,63 +17,67 @@ void main() {
   StreamController<bool> isLoadingController;
   StreamController<String> mainErrorController;
 
-  setUp(() {
-    presenter = LoginPresenterSpy();
+  initStreams() {
     emailErrorController = StreamController<String>();
     passwordErrorController = StreamController<String>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
     mainErrorController = StreamController<String>();
+  }
+
+  mockStreams() {
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
     when(presenter.isValidFormStream).thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
-  });
+  }
 
-  tearDown(() {
+  disposeStreams() {
     emailErrorController.close();
     passwordErrorController.close();
     isFormValidController.close();
     isLoadingController.close();
     mainErrorController.close();
-  });
+  }
 
-  testWidgets('Should load LoginPage with correct initial state', (WidgetTester tester) async {
+  Future<void> loadPage(WidgetTester tester) async {
+    presenter = LoginPresenterSpy();
+
+    initStreams();
+    mockStreams();
+
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
+  }
 
-    final userTextChildren = find.descendant(
-      of: find.bySemanticsLabel('User'),
-      matching: find.byType(Text),
-    );
+  tearDown(disposeStreams);
+
+  testWidgets('Should load LoginPage with correct initial state', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    final userTextChildren = find.descendant(of: find.bySemanticsLabel('User'), matching: find.byType(Text));
     expect(userTextChildren, findsOneWidget);
 
-    final userTextError = tester.widget<TextField>(find.byWidgetPredicate(
-      (widget) => widget is TextField && widget.decoration.hintText == 'User',
-    ));
+    final userTextError = tester.widget<TextField>(
+        find.byWidgetPredicate((widget) => widget is TextField && widget.decoration.hintText == 'User'));
     expect(userTextError.decoration.errorText, null);
 
-    final passTextChildren = find.descendant(
-      of: find.bySemanticsLabel('Password'),
-      matching: find.byType(Text),
-    );
+    final passTextChildren =
+        find.descendant(of: find.bySemanticsLabel('Password'), matching: find.byType(Text));
     expect(passTextChildren, findsOneWidget);
 
-    final passwordTextError = tester.widget<TextField>(find.byWidgetPredicate(
-      (widget) => widget is TextField && widget.decoration.hintText == 'Password',
-    ));
+    final passwordTextError = tester.widget<TextField>(
+        find.byWidgetPredicate((widget) => widget is TextField && widget.decoration.hintText == 'Password'));
     expect(passwordTextError.decoration.errorText, null);
 
     final loginButton = tester.widget<RaisedButton>(
-      find.byWidgetPredicate((widget) => widget is RaisedButton && (widget.child as Text).data == 'Login'),
-    );
+        find.byWidgetPredicate((widget) => widget is RaisedButton && (widget.child as Text).data == 'Login'));
     expect(loginButton.onPressed, null);
   });
 
   testWidgets('Should call validate with correct values ', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     final email = faker.internet.email();
     await tester.enterText(find.bySemanticsLabel('User'), email);
@@ -85,8 +89,7 @@ void main() {
   });
 
   testWidgets('Should present error if email is invalid', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     emailErrorController.add('any error');
     await tester.pump();
@@ -95,21 +98,18 @@ void main() {
   });
 
   testWidgets('Should present no error if email is valid', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     emailErrorController.add(null);
     await tester.pump();
 
-    final userTextError = tester.widget<TextField>(find.byWidgetPredicate(
-      (widget) => widget is TextField && widget.decoration.hintText == 'User',
-    ));
+    final userTextError = tester.widget<TextField>(
+        find.byWidgetPredicate((widget) => widget is TextField && widget.decoration.hintText == 'User'));
     expect(userTextError.decoration.errorText, null);
   });
 
   testWidgets('Should present error if clear email is invalid', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     emailErrorController.add('');
     await tester.pump();
@@ -118,8 +118,7 @@ void main() {
   });
 
   testWidgets('Should present error if password is invalid', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     passwordErrorController.add('any error password');
     await tester.pump();
@@ -128,21 +127,18 @@ void main() {
   });
 
   testWidgets('Should present no error if password is valid', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     passwordErrorController.add(null);
     await tester.pump();
 
-    final userTextError = tester.widget<TextField>(find.byWidgetPredicate(
-      (widget) => widget is TextField && widget.decoration.hintText == 'Password',
-    ));
+    final userTextError = tester.widget<TextField>(
+        find.byWidgetPredicate((widget) => widget is TextField && widget.decoration.hintText == 'Password'));
     expect(userTextError.decoration.errorText, null);
   });
 
   testWidgets('Should present error if clear password is invalid', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     passwordErrorController.add('');
     await tester.pump();
@@ -152,8 +148,7 @@ void main() {
   });
 
   testWidgets('Should enable button if form is valid', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     isFormValidController.add(true);
     await tester.pump();
@@ -164,8 +159,7 @@ void main() {
   });
 
   testWidgets('Should disable button if form is not valid', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     isFormValidController.add(false);
     await tester.pump();
@@ -176,8 +170,7 @@ void main() {
   });
 
   testWidgets('Should call authentication on form submit', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     isFormValidController.add(true);
     await tester.pump();
@@ -193,8 +186,7 @@ void main() {
   });
 
   testWidgets('Should present loading', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     isLoadingController.add(true);
     await tester.pump();
@@ -203,8 +195,7 @@ void main() {
   });
 
   testWidgets('Should hide loading', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     isLoadingController.add(true);
     await tester.pump();
@@ -215,8 +206,7 @@ void main() {
   });
 
   testWidgets('Should present error message if authentications fails', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     mainErrorController.add('main error');
     await tester.pump();
@@ -225,11 +215,8 @@ void main() {
   });
 
   testWidgets('Should close strams on dispose', (WidgetTester tester) async {
-    final loginPage = MaterialApp(home: LoginPage(presenter));
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
-    addTearDown(() {
-      verify(presenter.dispose()).called(1);
-    });
+    addTearDown(() => verify(presenter.dispose()).called(1));
   });
 }
