@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 
 import './login_presenter.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   final LoginPresenter presenter;
 
   const LoginPage(this.presenter);
 
   @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          presenter.isLoadingStream.listen((isLoading) {
+          widget.presenter.isLoadingStream.listen((isLoading) {
             if (isLoading) {
               showDialog(
                 context: context,
@@ -29,6 +34,15 @@ class LoginPage extends StatelessWidget {
             }
           });
 
+          widget.presenter.mainErrorStream.listen((error) {
+            if (error != null) {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text(error),
+                backgroundColor: Colors.red,
+              ));
+            }
+          });
+
           return Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
@@ -37,7 +51,7 @@ class LoginPage extends StatelessWidget {
               children: [
                 Text('Login'),
                 StreamBuilder<String>(
-                    stream: presenter.emailErrorStream,
+                    stream: widget.presenter.emailErrorStream,
                     builder: (context, snapshot) {
                       return TextField(
                         decoration: InputDecoration(
@@ -47,11 +61,11 @@ class LoginPage extends StatelessWidget {
                             Icons.email,
                           ),
                         ),
-                        onChanged: presenter.validateEmail,
+                        onChanged: widget.presenter.validateEmail,
                       );
                     }),
                 StreamBuilder<String>(
-                    stream: presenter.passwordErrorStream,
+                    stream: widget.presenter.passwordErrorStream,
                     builder: (context, snapshot) {
                       return TextField(
                         decoration: InputDecoration(
@@ -61,14 +75,14 @@ class LoginPage extends StatelessWidget {
                             Icons.lock,
                           ),
                         ),
-                        onChanged: presenter.validatePassword,
+                        onChanged: widget.presenter.validatePassword,
                       );
                     }),
                 StreamBuilder<bool>(
-                    stream: presenter.isValidFormStream,
+                    stream: widget.presenter.isValidFormStream,
                     builder: (context, snapshot) {
                       return RaisedButton(
-                        onPressed: snapshot.data == true ? presenter.auth : null,
+                        onPressed: snapshot.data == true ? widget.presenter.auth : null,
                         child: Text('Login'),
                       );
                     }),
@@ -82,5 +96,11 @@ class LoginPage extends StatelessWidget {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    widget.presenter.dispose();
+    super.dispose();
   }
 }
