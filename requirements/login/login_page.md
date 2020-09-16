@@ -16,4 +16,4 @@
 13. ✅ Chamar metodo de autenticar
 14. ✅ Exibir mensagem de erro caso o login falhe
 15. ✅ Esconder loading no fim da ação de login
-16. ✅ Fechar strams quando a página for encerrada
+16. ✅ Fechar streams quando a página for encerrada
