@@ -22,6 +22,10 @@ class LoginPage extends StatelessWidget {
                   children: [Center(child: CircularProgressIndicator())],
                 ),
               );
+            } else {
+              if (Navigator.canPop(context)) {
+                Navigator.of(context).pop();
+              }
             }
           });
 
