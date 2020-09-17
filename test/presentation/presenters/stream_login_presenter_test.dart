@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_avancado/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -25,6 +26,7 @@ void main() {
   PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
   void mockAuthentication() =>
       mockAuthenticationCall().thenAnswer((_) async => AccountEntity(faker.guid.guid()));
+  void mockAuthenticationError(DomainError error) => mockAuthenticationCall().thenThrow(error);
 
   setUp(() {
     validation = ValidationSpy();
@@ -120,6 +122,17 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
+    await sut.auth();
+  });
+
+  test('Should emit correct events on InvalidCredentialsError', () async {
+    mockAuthenticationError(DomainError.invalidCredentials);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emits(false));
+    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
 
     await sut.auth();
   });
