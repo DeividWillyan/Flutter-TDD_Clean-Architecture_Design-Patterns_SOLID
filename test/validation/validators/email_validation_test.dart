@@ -7,7 +7,8 @@ class EmailValidation implements FieldValidation {
   EmailValidation(this.field);
 
   @override
-  String validate(String value) => null;
+  String validate(String value) =>
+      value?.isNotEmpty != true || value.contains('@') ? null : 'Campo inválido.';
 }
 
 main() {
@@ -27,5 +28,9 @@ main() {
 
   test('Should return null if email is valid', () {
     expect(sut.validate(faker.internet.email()), isNull);
+  });
+
+  test('Should return error if email is invalid', () {
+    expect(sut.validate('email_invalid'), 'Campo inválido.');
   });
 }
