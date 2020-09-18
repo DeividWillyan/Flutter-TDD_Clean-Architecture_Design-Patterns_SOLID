@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:flutter_avancado/validation/protocols/field_validation.dart';
 import 'package:test/test.dart';
 
@@ -22,5 +23,9 @@ main() {
 
   test('Should return null if email is null', () {
     expect(sut.validate(null), isNull);
+  });
+
+  test('Should return null if email is valid', () {
+    expect(sut.validate(faker.internet.email()), isNull);
   });
 }
