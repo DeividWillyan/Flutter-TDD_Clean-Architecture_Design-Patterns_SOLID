@@ -11,7 +11,7 @@ class ValidationComposite implements Validation {
   @override
   validate({String field, String value}) {
     String error;
-    for (var validation in validations) {
+    for (var validation in validations.where((v) => v.field == field)) {
       error = validation.validate(value);
       if (error != null || error != '') return error;
     }
@@ -26,8 +26,8 @@ void main() {
   FieldValidationSpy validation1;
   FieldValidationSpy validation2;
 
-  void mockValidation(FieldValidationSpy validation, String error) {
-    when(validation.field).thenReturn('any_field');
+  void mockValidation(FieldValidationSpy validation, String error, {String field = 'any_field'}) {
+    when(validation.field).thenReturn(field);
     when(validation.validate(any)).thenReturn(error);
   }
 
@@ -49,10 +49,10 @@ void main() {
 
   test('Shold return primary error in ValidationComposite', () {
     mockValidation(validation1, 'error_1');
-    mockValidation(validation2, 'error_2');
+    mockValidation(validation2, 'error_2', field: 'other_field');
 
-    final error = sut.validate(field: 'any_field', value: 'any_value');
+    final error = sut.validate(field: 'other_field', value: 'any_value');
 
-    expect(error, 'error_1');
+    expect(error, 'error_2');
   });
 }
