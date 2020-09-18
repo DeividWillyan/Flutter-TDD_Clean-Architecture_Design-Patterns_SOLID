@@ -9,7 +9,14 @@ class ValidationComposite implements Validation {
   ValidationComposite(this.validations);
 
   @override
-  validate({String field, String value}) {}
+  validate({String field, String value}) {
+    String error;
+    for (var validation in validations) {
+      error = validation.validate(value);
+      if (error != null || error != '') return error;
+    }
+    return error;
+  }
 }
 
 class FieldValidationSpy extends Mock implements FieldValidation {}
@@ -38,5 +45,14 @@ void main() {
     final error = sut.validate(field: 'any_field', value: 'any_value');
 
     expect(error, null);
+  });
+
+  test('Shold return primary error in ValidationComposite', () {
+    mockValidation(validation1, 'error_1');
+    mockValidation(validation2, 'error_2');
+
+    final error = sut.validate(field: 'any_field', value: 'any_value');
+
+    expect(error, 'error_1');
   });
 }
