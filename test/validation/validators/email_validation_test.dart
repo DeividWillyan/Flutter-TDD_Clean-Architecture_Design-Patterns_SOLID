@@ -1,15 +1,6 @@
 import 'package:faker/faker.dart';
-import 'package:flutter_avancado/validation/protocols/field_validation.dart';
+import 'package:flutter_avancado/validation/validators/validators.dart';
 import 'package:test/test.dart';
-
-class EmailValidation implements FieldValidation {
-  final String field;
-  EmailValidation(this.field);
-
-  @override
-  String validate(String value) =>
-      value?.isNotEmpty != true || value.contains('@') ? null : 'Campo inválido.';
-}
 
 main() {
   EmailValidation sut;
