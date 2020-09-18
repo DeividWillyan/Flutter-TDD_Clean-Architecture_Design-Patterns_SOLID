@@ -21,7 +21,7 @@ void main() {
     mockValidation(validation1, null);
 
     validation2 = FieldValidationSpy();
-    mockValidation(validation2, '');
+    mockValidation(validation2, null);
 
     sut = ValidationComposite([validation1, validation2]);
   });

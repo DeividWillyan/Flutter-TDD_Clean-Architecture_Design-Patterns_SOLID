@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
-import '../ui/pages/pages.dart';
+import 'factories/factories.dart';
 
 void main() {
   runApp(App());
@@ -12,7 +13,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Avaçado',
       theme: ThemeData(
         primaryColor: Colors.purple[600],
@@ -22,7 +23,10 @@ class App extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(null),
+      initialRoute: '/login',
+      getPages: [
+        GetPage(name: '/login', page: makeLoginPage),
+      ],
     );
   }
 }

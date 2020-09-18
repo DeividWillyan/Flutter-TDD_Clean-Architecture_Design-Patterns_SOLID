@@ -11,7 +11,7 @@ class ValidationComposite implements Validation {
     String error;
     for (var validation in validations.where((v) => v.field == field)) {
       error = validation.validate(value);
-      if (error != null || error != '') return error;
+      if (error != null && error != '') return error;
     }
     return error;
   }
