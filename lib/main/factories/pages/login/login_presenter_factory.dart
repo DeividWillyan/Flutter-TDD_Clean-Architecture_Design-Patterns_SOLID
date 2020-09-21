@@ -3,5 +3,8 @@ import 'package:flutter_avancado/main/factories/usecases/authentication_factory.
 import '../../../../presentation/presenters/presenters.dart';
 import '../../../../ui/pages/pages.dart';
 
-LoginPresenter makeLoginPresenter() =>
+LoginPresenter makeStreamLoginPresenter() =>
     StreamLoginPresenter(validation: makeLoginValidation(), authentication: makeAuthentication());
+
+LoginPresenter makeGetxLoginPresenter() =>
+    GetxLoginPresenter(validation: makeLoginValidation(), authentication: makeAuthentication());
