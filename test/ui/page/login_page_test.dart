@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_avancado/ui/pages/login/login_presenter.dart';
 import 'package:flutter_avancado/ui/pages/pages.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/route_manager.dart';
 import 'package:mockito/mockito.dart';
 
 class LoginPresenterSpy extends Mock implements LoginPresenter {}
@@ -16,6 +17,7 @@ void main() {
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
   StreamController<String> mainErrorController;
+  StreamController<String> navigateToController;
 
   initStreams() {
     emailErrorController = StreamController<String>();
@@ -23,6 +25,7 @@ void main() {
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
     mainErrorController = StreamController<String>();
+    navigateToController = StreamController<String>();
   }
 
   mockStreams() {
@@ -31,6 +34,7 @@ void main() {
     when(presenter.isValidFormStream).thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
     when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
+    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
   }
 
   disposeStreams() {
@@ -39,6 +43,7 @@ void main() {
     isFormValidController.close();
     isLoadingController.close();
     mainErrorController.close();
+    navigateToController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -47,7 +52,13 @@ void main() {
     initStreams();
     mockStreams();
 
-    final loginPage = MaterialApp(home: LoginPage(presenter));
+    final loginPage = GetMaterialApp(
+      initialRoute: '/login',
+      getPages: [
+        GetPage(name: '/login', page: () => LoginPage(presenter)),
+        GetPage(name: '/surveys', page: () => Scaffold(body: Text('Enquetes'))),
+      ],
+    );
     await tester.pumpWidget(loginPage);
   }
 
@@ -218,5 +229,15 @@ void main() {
     await loadPage(tester);
 
     addTearDown(() => verify(presenter.dispose()).called(1));
+  });
+
+  testWidgets('Should change page', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    navigateToController.add('/surveys');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/surveys');
+    expect(find.text('Enquetes'), findsOneWidget);
   });
 }

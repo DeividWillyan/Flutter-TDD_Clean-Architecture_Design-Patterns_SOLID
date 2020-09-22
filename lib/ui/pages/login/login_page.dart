@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
 import './login_presenter.dart';
 
@@ -40,6 +41,12 @@ class _LoginPageState extends State<LoginPage> {
                 content: Text(error),
                 backgroundColor: Colors.red,
               ));
+            }
+          });
+
+          widget.presenter.navigateToStream.listen((page) {
+            if (page?.isNotEmpty == true) {
+              Get.offAllNamed(page);
             }
           });
 
