@@ -1,5 +1,4 @@
 import 'package:faker/faker.dart';
-import 'package:flutter_avancado/domain/helpers/domain_error.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
