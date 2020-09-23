@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-
-import 'factories/factories.dart';
+import 'package:flutter_avancado/data/usecases/usecases.dart';
+import 'package:flutter_avancado/infra/cache/cache.dart';
+import 'package:flutter_avancado/infra/http/http.dart';
+import 'package:flutter_avancado/main/factories/factories.dart';
+import 'package:flutter_avancado/presentation/presenters/presenters.dart';
+import 'package:flutter_avancado/ui/pages/pages.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 
 void main() {
-  runApp(App());
+  runApp(ModularApp(module: AppModule()));
 }
 
 class App extends StatelessWidget {
@@ -13,7 +19,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Flutter Avaçado',
       theme: ThemeData(
         primaryColor: Colors.purple[600],
@@ -24,10 +30,33 @@ class App extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: '/login',
-      getPages: [
-        GetPage(name: '/login', page: makeLoginPage),
-        GetPage(name: '/surveys', page: () => Scaffold(body: Text('Enquetes'))),
-      ],
+      navigatorKey: Modular.navigatorKey,
+      onGenerateRoute: Modular.generateRoute,
     );
   }
+}
+
+class AppModule extends MainModule {
+  @override
+  List<Bind> get binds => [
+        Bind((i) => Client()),
+        Bind((i) => HttpAdpter(i.get())),
+        Bind((i) => RemoteAuthentication(httpClient: i.get(), url: 'http://fordevs.herokuapp.com/api/login')),
+        Bind((i) => FlutterSecureStorage()),
+        Bind((i) => LocalStorageAdpter(secureStorage: i.get())),
+        Bind((i) => LocalSaveCurrentAccout(saveSecureCacheStorage: i.get())),
+        Bind((i) => makeLoginValidation()),
+        Bind((i) =>
+            GetxLoginPresenter(authentication: i.get(), saveCurrentAccount: i.get(), validation: i.get())),
+        Bind((i) => LoginPage(i.get())),
+      ];
+
+  @override
+  List<ModularRouter> get routers => [
+        ModularRouter('/login', child: (_, __) => LoginPage(Modular.get())),
+        ModularRouter('/surveys', child: (_, __) => Scaffold(body: Text('Enquetes'))),
+      ];
+
+  @override
+  Widget get bootstrap => App();
 }
