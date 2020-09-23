@@ -40,5 +40,13 @@ main() {
 
       verify(secureStorage.read(key: key)).called(1);
     });
+
+    test('Should return correct value on success', () async {
+      when(secureStorage.read(key: anyNamed('key'))).thenAnswer((_) async => value);
+
+      final result = await sut.fetchSecure(key);
+
+      expect(result, value);
+    });
   });
 }
