@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_avancado/domain/entities/account_entity.dart';
+import 'package:flutter_avancado/domain/helpers/helpers.dart';
 import 'package:flutter_avancado/domain/usecases/load_current_account.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -10,8 +11,12 @@ class LocalLoadCurrentAccount implements LoadCurrentAccount {
   LocalLoadCurrentAccount({@required this.fetchSecureCacheStorage});
 
   Future<AccountEntity> load() async {
-    final token = await fetchSecureCacheStorage.fetchSecure('token');
-    return AccountEntity(token);
+    try {
+      final token = await fetchSecureCacheStorage.fetchSecure('token');
+      return AccountEntity(token);
+    } catch (error) {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -27,6 +32,7 @@ main() {
   String token;
 
   mockSuccess() => when(fetchSecureCacheStorage.fetchSecure(any)).thenAnswer((_) async => token);
+  mockUnexpectedError() => when(fetchSecureCacheStorage.fetchSecure(any)).thenThrow(Exception());
 
   setUp(() {
     fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
@@ -46,5 +52,13 @@ main() {
     final account = await sut.load();
 
     expect(account, AccountEntity(token));
+  });
+
+  test('Should throw UnexpectedError if fetchSecureCacheStorage throws', () async {
+    mockUnexpectedError();
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
