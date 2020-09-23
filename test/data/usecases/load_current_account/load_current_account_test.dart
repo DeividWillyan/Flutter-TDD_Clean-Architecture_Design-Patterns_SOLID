@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_avancado/data/cache/cache.dart';
 import 'package:flutter_avancado/data/usecases/usecases.dart';
-import 'package:flutter_avancado/domain/entities/account_entity.dart';
+import 'package:flutter_avancado/domain/entities/entities.dart';
 import 'package:flutter_avancado/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
