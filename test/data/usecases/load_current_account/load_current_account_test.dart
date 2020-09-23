@@ -26,10 +26,14 @@ main() {
   FetchSecureCacheStorage fetchSecureCacheStorage;
   String token;
 
+  mockSuccess() => when(fetchSecureCacheStorage.fetchSecure(any)).thenAnswer((_) async => token);
+
   setUp(() {
     fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
     sut = LocalLoadCurrentAccount(fetchSecureCacheStorage: fetchSecureCacheStorage);
     token = faker.guid.guid();
+
+    mockSuccess();
   });
 
   test('Should call FetchSecureCacheStorage with corrent values', () async {
@@ -39,8 +43,6 @@ main() {
   });
 
   test('Should return an AccountEntity', () async {
-    when(fetchSecureCacheStorage.fetchSecure(any)).thenAnswer((_) async => token);
-
     final account = await sut.load();
 
     expect(account, AccountEntity(token));
