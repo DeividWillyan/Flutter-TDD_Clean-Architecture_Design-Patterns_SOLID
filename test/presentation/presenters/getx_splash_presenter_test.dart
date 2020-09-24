@@ -22,7 +22,7 @@ main() {
   });
 
   test('Should call LoadCurrentAccount', () async {
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
 
     verify(loadCurrentAccount.load()).called(1);
   });
@@ -30,7 +30,7 @@ main() {
   test('Should go to surveys page on success', () async {
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
 
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
   });
 
   test('Should go to Login page on null result', () async {
@@ -38,7 +38,7 @@ main() {
 
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
 
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
   });
 
   test('Should go to Login page on error', () async {
@@ -46,6 +46,6 @@ main() {
 
     sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
 
-    await sut.checkAccount();
+    await sut.checkAccount(durationInSeconds: 0);
   });
 }
