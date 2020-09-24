@@ -9,7 +9,7 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    presenter.loadCurrentAccount();
+    presenter.checkAccount();
     return Builder(builder: (context) {
       presenter.navigateToStream.listen((page) {
         if (page?.isNotEmpty == true) Get.offAllNamed(page);
