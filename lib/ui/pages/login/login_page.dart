@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_avancado/utils/i18n/resources.dart';
 import 'package:get/route_manager.dart';
 
 import './login_presenter.dart';
@@ -95,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     }),
                 FlatButton(
                   onPressed: () {},
-                  child: Text('Registro'),
+                  child: Text(R.strings.addAccount),
                 ),
               ],
             ),
