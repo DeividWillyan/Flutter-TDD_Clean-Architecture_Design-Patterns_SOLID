@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import 'factories/factories.dart';
+import 'main/factories/factories.dart';
 
 void main() {
   runApp(App());
