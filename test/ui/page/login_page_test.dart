@@ -225,6 +225,15 @@ void main() {
     expect(find.text('main error'), findsOneWidget);
   });
 
+  testWidgets('Should present error message if authentications fails our null', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    mainErrorController.add('');
+    await tester.pump();
+
+    expect(find.text('main error'), findsOneWidget);
+  });
+
   testWidgets('Should close streams on dispose', (WidgetTester tester) async {
     await loadPage(tester);
 
