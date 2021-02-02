@@ -1,4 +1,4 @@
-# Flutter Project
+# Flutter Project ![Flutter CI](https://github.com/DeividWillyan/Flutter-TDD_Clean-Architecture_Design-Patterns_SOLID/workflows/Flutter%20CI/badge.svg)
 
 - [X] Clean Archtecture
 - [X] Design Patterns
