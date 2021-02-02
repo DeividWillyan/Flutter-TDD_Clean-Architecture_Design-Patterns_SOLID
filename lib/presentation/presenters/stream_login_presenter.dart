@@ -18,7 +18,11 @@ class LoginState {
 
   String mainError;
 
-  bool get isFormValid => emailError == null && passwordError == null && email != null && password != null;
+  bool get isFormValid =>
+      emailError == null &&
+      passwordError == null &&
+      email != null &&
+      password != null;
 }
 
 class StreamLoginPresenter implements LoginPresenter {
@@ -32,13 +36,19 @@ class StreamLoginPresenter implements LoginPresenter {
   var _streamController = StreamController<LoginState>.broadcast();
   var _state = LoginState();
 
-  Stream get emailErrorStream => _streamController?.stream?.map((state) => state.emailError)?.distinct();
-  Stream get passwordErrorStream =>
-      _streamController?.stream?.map((state) => state.passwordError)?.distinct();
-  Stream get mainErrorStream => _streamController?.stream?.map((state) => state.mainError)?.distinct();
-  Stream get isValidFormStream => _streamController?.stream?.map((state) => state.isFormValid)?.distinct();
-  Stream get isLoadingStream => _streamController?.stream?.map((state) => state.isLoading)?.distinct();
-  Stream get navigateToStream => _streamController?.stream?.map((state) => state.navigateTo)?.distinct();
+  Stream get emailErrorStream =>
+      _streamController?.stream?.map((state) => state.emailError)?.distinct();
+  Stream get passwordErrorStream => _streamController?.stream
+      ?.map((state) => state.passwordError)
+      ?.distinct();
+  Stream get mainErrorStream =>
+      _streamController?.stream?.map((state) => state.mainError)?.distinct();
+  Stream get isValidFormStream =>
+      _streamController?.stream?.map((state) => state.isFormValid)?.distinct();
+  Stream get isLoadingStream =>
+      _streamController?.stream?.map((state) => state.isLoading)?.distinct();
+  Stream get navigateToStream =>
+      _streamController?.stream?.map((state) => state.navigateTo)?.distinct();
 
   void _update() => _streamController?.add(_state);
 
@@ -50,7 +60,8 @@ class StreamLoginPresenter implements LoginPresenter {
 
   void validatePassword(String password) {
     _state.password = password;
-    _state.passwordError = validation.validate(field: 'password', value: password);
+    _state.passwordError =
+        validation.validate(field: 'password', value: password);
     _update();
   }
 
@@ -58,7 +69,8 @@ class StreamLoginPresenter implements LoginPresenter {
     _state.isLoading = true;
     _update();
     try {
-      await authentication.auth(AuthenticationParams(email: _state.email, secret: _state.password));
+      await authentication.auth(
+          AuthenticationParams(email: _state.email, secret: _state.password));
     } on DomainError catch (error) {
       _state.mainError = error.description;
     }
