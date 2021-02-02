@@ -16,7 +16,8 @@ void main() {
     presenter = SplashPresenterSpy();
     navigateToController = StreamController();
 
-    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
+    when(presenter.navigateToStream)
+        .thenAnswer((_) => navigateToController.stream);
   });
 
   tearDown(() {
@@ -28,18 +29,22 @@ void main() {
           initialRoute: '/',
           getPages: [
             GetPage(name: '/', page: () => SplashPage(presenter: presenter)),
-            GetPage(name: '/any_route', page: () => Material(child: Text('fake page')))
+            GetPage(
+                name: '/any_route',
+                page: () => Material(child: Text('fake page')))
           ],
         ),
       );
 
-  testWidgets("Should present spinner on page load", (WidgetTester tester) async {
+  testWidgets("Should present spinner on page load",
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
-  testWidgets("Should call loadCurrentAccount in presenter", (WidgetTester tester) async {
+  testWidgets("Should call loadCurrentAccount in presenter",
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     verify(presenter.checkAccount()).called(1);

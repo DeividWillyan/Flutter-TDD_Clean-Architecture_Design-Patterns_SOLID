@@ -23,16 +23,21 @@ void main() {
   String password;
   String token;
 
-  PostExpectation mockValidationCall({String field}) =>
-      when(validation.validate(field: field ?? anyNamed('field'), value: anyNamed('value')));
-  void mockValidation({String field, String value}) => mockValidationCall(field: field).thenReturn(value);
+  PostExpectation mockValidationCall({String field}) => when(validation
+      .validate(field: field ?? anyNamed('field'), value: anyNamed('value')));
+  void mockValidation({String field, String value}) =>
+      mockValidationCall(field: field).thenReturn(value);
 
   PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
-  void mockAuthentication() => mockAuthenticationCall().thenAnswer((_) async => AccountEntity(token));
-  void mockAuthenticationError(DomainError error) => mockAuthenticationCall().thenThrow(error);
+  void mockAuthentication() =>
+      mockAuthenticationCall().thenAnswer((_) async => AccountEntity(token));
+  void mockAuthenticationError(DomainError error) =>
+      mockAuthenticationCall().thenThrow(error);
 
-  PostExpectation mockSaveCurrentAccountCall() => when(saveCurrentAccount.save(any));
-  void mockSaveCurrentAccountError() => mockSaveCurrentAccountCall().thenThrow(DomainError.unexpected);
+  PostExpectation mockSaveCurrentAccountCall() =>
+      when(saveCurrentAccount.save(any));
+  void mockSaveCurrentAccountError() =>
+      mockSaveCurrentAccountCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     validation = ValidationSpy();
@@ -60,8 +65,10 @@ void main() {
   test('Should emit email error if validations fails', () {
     mockValidation(value: 'error');
 
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
-    sut.isValidFormStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    sut.emailErrorStream
+        .listen(expectAsync1((error) => expect(error, 'error')));
+    sut.isValidFormStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
     sut.validateEmail(email);
@@ -69,7 +76,8 @@ void main() {
 
   test('Should emit null if validations succeeds', () {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
-    sut.isValidFormStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    sut.isValidFormStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
     sut.validateEmail(email);
@@ -84,16 +92,20 @@ void main() {
   test('Should emit password error if validations fails', () {
     mockValidation(value: 'error');
 
-    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
-    sut.isValidFormStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, 'error')));
+    sut.isValidFormStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validatePassword(password);
     sut.validatePassword(password);
   });
 
   test('Should emit null if password validations not fails', () {
-    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
-    sut.isValidFormStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, null)));
+    sut.isValidFormStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validatePassword(password);
     sut.validatePassword(password);
@@ -102,9 +114,12 @@ void main() {
   test('Should form fails with email validation fails', () {
     mockValidation(field: 'email', value: 'error');
 
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
-    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
-    sut.isValidFormStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+    sut.emailErrorStream
+        .listen(expectAsync1((error) => expect(error, 'error')));
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, null)));
+    sut.isValidFormStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -112,7 +127,8 @@ void main() {
 
   test('Should form is valid', () async {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
-    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, null)));
     expectLater(sut.isValidFormStream, emitsInOrder([false, true]));
 
     sut.validateEmail(email);
@@ -126,7 +142,9 @@ void main() {
 
     await sut.auth();
 
-    verify(authentication.auth(AuthenticationParams(email: email, secret: password))).called(1);
+    verify(authentication
+            .auth(AuthenticationParams(email: email, secret: password)))
+        .called(1);
   });
 
   test('Should emit correct events on Authentication success', () async {
@@ -144,7 +162,8 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
+    sut.mainErrorStream.listen(
+        expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
 
     await sut.auth();
   });
@@ -155,8 +174,8 @@ void main() {
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-    sut.mainErrorStream.listen(
-        expectAsync1((error) => expect(error, 'Algo de errado aconteceu. Tente novamento em breve.')));
+    sut.mainErrorStream.listen(expectAsync1((error) =>
+        expect(error, 'Algo de errado aconteceu. Tente novamento em breve.')));
 
     await sut.auth();
   });
@@ -176,7 +195,8 @@ void main() {
     sut.validatePassword(password);
 
     sut.mainErrorStream.listen(expectAsync1(
-      (error) => expect(error, 'Algo de errado aconteceu. Tente novamento em breve.'),
+      (error) =>
+          expect(error, 'Algo de errado aconteceu. Tente novamento em breve.'),
     ));
 
     await sut.auth();
@@ -186,7 +206,8 @@ void main() {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
-    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
+    sut.navigateToStream
+        .listen(expectAsync1((page) => expect(page, '/surveys')));
 
     await sut.auth();
   });

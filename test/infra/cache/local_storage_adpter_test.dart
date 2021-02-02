@@ -26,7 +26,8 @@ main() {
     });
 
     test('Should throw if save secure throws', () async {
-      when(secureStorage.write(key: anyNamed('key'), value: anyNamed('value'))).thenThrow(Exception());
+      when(secureStorage.write(key: anyNamed('key'), value: anyNamed('value')))
+          .thenThrow(Exception());
 
       final result = sut.saveSecure(key: key, value: value);
 
@@ -42,7 +43,8 @@ main() {
     });
 
     test('Should return correct value on success', () async {
-      when(secureStorage.read(key: anyNamed('key'))).thenAnswer((_) async => value);
+      when(secureStorage.read(key: anyNamed('key')))
+          .thenAnswer((_) async => value);
 
       final result = await sut.fetchSecure(key);
 

@@ -11,7 +11,8 @@ void main() {
   FieldValidationSpy validation1;
   FieldValidationSpy validation2;
 
-  void mockValidation(FieldValidationSpy validation, String error, {String field = 'any_field'}) {
+  void mockValidation(FieldValidationSpy validation, String error,
+      {String field = 'any_field'}) {
     when(validation.field).thenReturn(field);
     when(validation.validate(any)).thenReturn(error);
   }

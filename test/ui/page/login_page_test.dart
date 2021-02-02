@@ -29,12 +29,18 @@ void main() {
   }
 
   mockStreams() {
-    when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
-    when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
-    when(presenter.isValidFormStream).thenAnswer((_) => isFormValidController.stream);
-    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
-    when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
-    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
+    when(presenter.emailErrorStream)
+        .thenAnswer((_) => emailErrorController.stream);
+    when(presenter.passwordErrorStream)
+        .thenAnswer((_) => passwordErrorController.stream);
+    when(presenter.isValidFormStream)
+        .thenAnswer((_) => isFormValidController.stream);
+    when(presenter.isLoadingStream)
+        .thenAnswer((_) => isLoadingController.stream);
+    when(presenter.mainErrorStream)
+        .thenAnswer((_) => mainErrorController.stream);
+    when(presenter.navigateToStream)
+        .thenAnswer((_) => navigateToController.stream);
   }
 
   disposeStreams() {
@@ -64,30 +70,36 @@ void main() {
 
   tearDown(disposeStreams);
 
-  testWidgets('Should load LoginPage with correct initial state', (WidgetTester tester) async {
+  testWidgets('Should load LoginPage with correct initial state',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
-    final userTextChildren = find.descendant(of: find.bySemanticsLabel('User'), matching: find.byType(Text));
+    final userTextChildren = find.descendant(
+        of: find.bySemanticsLabel('User'), matching: find.byType(Text));
     expect(userTextChildren, findsOneWidget);
 
-    final userTextError = tester.widget<TextField>(
-        find.byWidgetPredicate((widget) => widget is TextField && widget.decoration.hintText == 'User'));
+    final userTextError = tester.widget<TextField>(find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField && widget.decoration.hintText == 'User'));
     expect(userTextError.decoration.errorText, null);
 
-    final passTextChildren =
-        find.descendant(of: find.bySemanticsLabel('Password'), matching: find.byType(Text));
+    final passTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Password'), matching: find.byType(Text));
     expect(passTextChildren, findsOneWidget);
 
-    final passwordTextError = tester.widget<TextField>(
-        find.byWidgetPredicate((widget) => widget is TextField && widget.decoration.hintText == 'Password'));
+    final passwordTextError = tester.widget<TextField>(find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField && widget.decoration.hintText == 'Password'));
     expect(passwordTextError.decoration.errorText, null);
 
-    final loginButton = tester.widget<RaisedButton>(
-        find.byWidgetPredicate((widget) => widget is RaisedButton && (widget.child as Text).data == 'Login'));
+    final loginButton = tester.widget<RaisedButton>(find.byWidgetPredicate(
+        (widget) =>
+            widget is RaisedButton && (widget.child as Text).data == 'Login'));
     expect(loginButton.onPressed, null);
   });
 
-  testWidgets('Should call validate with correct values ', (WidgetTester tester) async {
+  testWidgets('Should call validate with correct values ',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     final email = faker.internet.email();
@@ -99,7 +111,8 @@ void main() {
     verify(presenter.validatePassword(password));
   });
 
-  testWidgets('Should present error if email is invalid', (WidgetTester tester) async {
+  testWidgets('Should present error if email is invalid',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     emailErrorController.add('any error');
@@ -108,27 +121,34 @@ void main() {
     expect(find.text('any error'), findsOneWidget);
   });
 
-  testWidgets('Should present no error if email is valid', (WidgetTester tester) async {
+  testWidgets('Should present no error if email is valid',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     emailErrorController.add(null);
     await tester.pump();
 
-    final userTextError = tester.widget<TextField>(
-        find.byWidgetPredicate((widget) => widget is TextField && widget.decoration.hintText == 'User'));
+    final userTextError = tester.widget<TextField>(find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField && widget.decoration.hintText == 'User'));
     expect(userTextError.decoration.errorText, null);
   });
 
-  testWidgets('Should present error if clear email is invalid', (WidgetTester tester) async {
+  testWidgets('Should present error if clear email is invalid',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     emailErrorController.add('');
     await tester.pump();
 
-    expect(find.descendant(of: find.bySemanticsLabel('User'), matching: find.byType(Text)), findsOneWidget);
+    expect(
+        find.descendant(
+            of: find.bySemanticsLabel('User'), matching: find.byType(Text)),
+        findsOneWidget);
   });
 
-  testWidgets('Should present error if password is invalid', (WidgetTester tester) async {
+  testWidgets('Should present error if password is invalid',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     passwordErrorController.add('any error password');
@@ -137,57 +157,69 @@ void main() {
     expect(find.text('any error password'), findsOneWidget);
   });
 
-  testWidgets('Should present no error if password is valid', (WidgetTester tester) async {
+  testWidgets('Should present no error if password is valid',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     passwordErrorController.add(null);
     await tester.pump();
 
-    final userTextError = tester.widget<TextField>(
-        find.byWidgetPredicate((widget) => widget is TextField && widget.decoration.hintText == 'Password'));
+    final userTextError = tester.widget<TextField>(find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField && widget.decoration.hintText == 'Password'));
     expect(userTextError.decoration.errorText, null);
   });
 
-  testWidgets('Should present error if clear password is invalid', (WidgetTester tester) async {
+  testWidgets('Should present error if clear password is invalid',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     passwordErrorController.add('');
     await tester.pump();
 
     expect(
-        find.descendant(of: find.bySemanticsLabel('Password'), matching: find.byType(Text)), findsOneWidget);
+        find.descendant(
+            of: find.bySemanticsLabel('Password'), matching: find.byType(Text)),
+        findsOneWidget);
   });
 
-  testWidgets('Should enable button if form is valid', (WidgetTester tester) async {
+  testWidgets('Should enable button if form is valid',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     isFormValidController.add(true);
     await tester.pump();
 
-    final loginButton = tester.widget<RaisedButton>(
-        find.byWidgetPredicate((widget) => widget is RaisedButton && (widget.child as Text).data == 'Login'));
+    final loginButton = tester.widget<RaisedButton>(find.byWidgetPredicate(
+        (widget) =>
+            widget is RaisedButton && (widget.child as Text).data == 'Login'));
     expect(loginButton.onPressed, isNotNull);
   });
 
-  testWidgets('Should disable button if form is not valid', (WidgetTester tester) async {
+  testWidgets('Should disable button if form is not valid',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     isFormValidController.add(false);
     await tester.pump();
 
-    final loginButton = tester.widget<RaisedButton>(
-        find.byWidgetPredicate((widget) => widget is RaisedButton && (widget.child as Text).data == 'Login'));
+    final loginButton = tester.widget<RaisedButton>(find.byWidgetPredicate(
+        (widget) =>
+            widget is RaisedButton && (widget.child as Text).data == 'Login'));
     expect(loginButton.onPressed, isNull);
   });
 
-  testWidgets('Should call authentication on form submit', (WidgetTester tester) async {
+  testWidgets('Should call authentication on form submit',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     isFormValidController.add(true);
     await tester.pump();
 
     final btnLogin = find.byWidgetPredicate((widget) =>
-        widget is RaisedButton && (widget.child as Text).data == 'Login' && widget.onPressed != null);
+        widget is RaisedButton &&
+        (widget.child as Text).data == 'Login' &&
+        widget.onPressed != null);
     expect(btnLogin, findsOneWidget);
 
     await tester.tap(btnLogin);
@@ -216,7 +248,8 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should present error message if authentications fails', (WidgetTester tester) async {
+  testWidgets('Should present error message if authentications fails',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     mainErrorController.add('main error');
@@ -225,7 +258,8 @@ void main() {
     expect(find.text('main error'), findsOneWidget);
   });
 
-  testWidgets('Should present error message if authentications fails our null', (WidgetTester tester) async {
+  testWidgets('Should present error message if authentications fails our null',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     mainErrorController.add('');
