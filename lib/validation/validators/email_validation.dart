@@ -8,7 +8,9 @@ class EmailValidation extends Equatable implements FieldValidation {
 
   @override
   String validate(String value) =>
-      value?.isNotEmpty != true || value.contains('@') ? null : 'Campo inválido.';
+      value?.isNotEmpty != true || value.contains('@')
+          ? null
+          : 'Campo inválido.';
 
   @override
   List<Object> get props => [field];

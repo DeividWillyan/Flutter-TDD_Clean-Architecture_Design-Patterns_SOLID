@@ -64,7 +64,9 @@ class _LoginPageState extends State<LoginPage> {
                       return TextField(
                         decoration: InputDecoration(
                           hintText: 'User',
-                          errorText: snapshot?.data?.isEmpty == true ? null : snapshot.data,
+                          errorText: snapshot?.data?.isEmpty == true
+                              ? null
+                              : snapshot.data,
                           icon: Icon(
                             Icons.email,
                           ),
@@ -78,7 +80,9 @@ class _LoginPageState extends State<LoginPage> {
                       return TextField(
                         decoration: InputDecoration(
                           hintText: 'Password',
-                          errorText: snapshot?.data?.isEmpty == true ? null : snapshot.data,
+                          errorText: snapshot?.data?.isEmpty == true
+                              ? null
+                              : snapshot.data,
                           icon: Icon(
                             Icons.lock,
                           ),
@@ -90,7 +94,9 @@ class _LoginPageState extends State<LoginPage> {
                     stream: widget.presenter.isValidFormStream,
                     builder: (context, snapshot) {
                       return RaisedButton(
-                        onPressed: snapshot.data == true ? widget.presenter.auth : null,
+                        onPressed: snapshot.data == true
+                            ? widget.presenter.auth
+                            : null,
                         child: Text('Login'),
                       );
                     }),
