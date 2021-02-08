@@ -3,7 +3,7 @@
 
 - [X] Clean Archtecture
 - [X] Design Patterns
-    - [X] Adpter
+    - [X] Adapter
 - [X] Solid
 - [X] TDD
 - [X] BDD
