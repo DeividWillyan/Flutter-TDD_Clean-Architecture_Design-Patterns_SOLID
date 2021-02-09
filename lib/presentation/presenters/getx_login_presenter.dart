@@ -47,16 +47,15 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   void validatePassword(String password) {
     _password = password;
-    _passwordError.value =
-        validation.validate(field: 'password', value: password);
+    _passwordError.value = validation.validate(field: 'password', value: password);
     _validateForm();
   }
 
   Future<void> auth() async {
     try {
       _isLoading.value = true;
-      final result = await authentication
-          .auth(AuthenticationParams(email: _email, secret: _password));
+      final result =
+          await authentication.auth(AuthenticationParams(email: _email, secret: _password));
       await saveCurrentAccount.save(result);
       _navigateTo.value = '/surveys';
     } on DomainError catch (error) {
@@ -64,6 +63,4 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
       _isLoading.value = false;
     }
   }
-
-  dispose() {}
 }
