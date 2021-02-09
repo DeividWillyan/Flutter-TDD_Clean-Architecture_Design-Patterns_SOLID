@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                child: SimpleDialog(
+                builder: (context) => SimpleDialog(
                   contentPadding: EdgeInsets.all(24),
                   children: [Center(child: CircularProgressIndicator())],
                 ),
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
 
           widget.presenter.mainErrorStream.listen((error) {
             if (error != null) {
-              Scaffold.of(context).showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(error),
                 backgroundColor: Colors.red,
               ));
@@ -64,9 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                       return TextField(
                         decoration: InputDecoration(
                           hintText: 'User',
-                          errorText: snapshot?.data?.isEmpty == true
-                              ? null
-                              : snapshot.data,
+                          errorText: snapshot?.data?.isEmpty == true ? null : snapshot.data,
                           icon: Icon(
                             Icons.email,
                           ),
@@ -80,9 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                       return TextField(
                         decoration: InputDecoration(
                           hintText: 'Password',
-                          errorText: snapshot?.data?.isEmpty == true
-                              ? null
-                              : snapshot.data,
+                          errorText: snapshot?.data?.isEmpty == true ? null : snapshot.data,
                           icon: Icon(
                             Icons.lock,
                           ),
@@ -93,14 +89,12 @@ class _LoginPageState extends State<LoginPage> {
                 StreamBuilder<bool>(
                     stream: widget.presenter.isValidFormStream,
                     builder: (context, snapshot) {
-                      return RaisedButton(
-                        onPressed: snapshot.data == true
-                            ? widget.presenter.auth
-                            : null,
+                      return ElevatedButton(
+                        onPressed: snapshot.data == true ? widget.presenter.auth : null,
                         child: Text('Login'),
                       );
                     }),
-                FlatButton(
+                TextButton(
                   onPressed: () {},
                   child: Text(R.strings.addAccount),
                 ),
