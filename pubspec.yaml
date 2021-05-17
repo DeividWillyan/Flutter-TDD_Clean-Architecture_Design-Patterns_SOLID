@@ -39,6 +39,7 @@ dev_dependencies:
   test:
   mockito:
   faker:
+  dart_code_metrics: ^3.2.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

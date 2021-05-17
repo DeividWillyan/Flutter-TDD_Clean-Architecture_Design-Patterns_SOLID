@@ -15,7 +15,7 @@ jobs:
       with:
         java-version: '12.x'
 
-    - uses: subosito/flutter-action@v1
+    - uses: subosito/flutter-action@master
       with:
         channel: 'beta' 
 
@@ -23,6 +23,7 @@ jobs:
     - run: flutter format --set-exit-if-changed .
     - run: flutter analyze .
     - run: flutter test
+    - run: flutter pub run dart_code_metrics:metrics --reporter=github lib
     - run: flutter build apk
     - uses: actions/upload-artifact@v1
       with:
