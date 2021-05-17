@@ -30,25 +30,30 @@ void main() {
           getPages: [
             GetPage(name: '/', page: () => SplashPage(presenter: presenter)),
             GetPage(
-                name: '/any_route',
-                page: () => Material(child: Text('fake page')))
+              name: '/any_route',
+              page: () => Material(child: Text('fake page')),
+            ),
           ],
         ),
       );
 
-  testWidgets("Should present spinner on page load",
-      (WidgetTester tester) async {
-    await loadPage(tester);
+  testWidgets(
+    "Should present spinner on page load",
+    (WidgetTester tester) async {
+      await loadPage(tester);
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-  });
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    },
+  );
 
-  testWidgets("Should call loadCurrentAccount in presenter",
-      (WidgetTester tester) async {
-    await loadPage(tester);
+  testWidgets(
+    "Should call loadCurrentAccount in presenter",
+    (WidgetTester tester) async {
+      await loadPage(tester);
 
-    verify(presenter.checkAccount()).called(1);
-  });
+      verify(presenter.checkAccount()).called(1);
+    },
+  );
 
   testWidgets("Should change page", (WidgetTester tester) async {
     await loadPage(tester);

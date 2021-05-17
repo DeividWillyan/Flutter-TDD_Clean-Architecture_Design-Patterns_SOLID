@@ -163,7 +163,8 @@ void main() {
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.mainErrorStream.listen(
-        expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
+      expectAsync1((error) => expect(error, 'Credenciais inválidas.')),
+    );
 
     await sut.auth();
   });

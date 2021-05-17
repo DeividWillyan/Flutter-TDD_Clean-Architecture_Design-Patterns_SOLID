@@ -22,7 +22,8 @@ main() {
   setUp(() {
     fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
     sut = LocalLoadCurrentAccount(
-        fetchSecureCacheStorage: fetchSecureCacheStorage);
+      fetchSecureCacheStorage: fetchSecureCacheStorage,
+    );
     token = faker.guid.guid();
 
     mockSuccess();
@@ -40,12 +41,14 @@ main() {
     expect(account, AccountEntity(token));
   });
 
-  test('Should throw UnexpectedError if fetchSecureCacheStorage throws',
-      () async {
-    mockUnexpectedError();
+  test(
+    'Should throw UnexpectedError if fetchSecureCacheStorage throws',
+    () async {
+      mockUnexpectedError();
 
-    final future = sut.load();
+      final future = sut.load();
 
-    expect(future, throwsA(DomainError.unexpected));
-  });
+      expect(future, throwsA(DomainError.unexpected));
+    },
+  );
 }

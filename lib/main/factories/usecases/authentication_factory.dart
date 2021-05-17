@@ -4,4 +4,6 @@ import '../../../domain/usecases/usecases.dart';
 import '../http/http.dart';
 
 Authentication makeAuthentication() => RemoteAuthentication(
-    httpClient: makeHttpAdpter(), url: makeApiUrl('login'));
+      httpClient: makeHttpAdpter(),
+      url: makeApiUrl('login'),
+    );

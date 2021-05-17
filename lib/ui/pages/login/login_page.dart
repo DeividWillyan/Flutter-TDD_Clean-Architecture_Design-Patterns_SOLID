@@ -59,47 +59,49 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Text('Login'),
                 StreamBuilder<String>(
-                    stream: widget.presenter.emailErrorStream,
-                    builder: (context, snapshot) {
-                      return TextField(
-                        decoration: InputDecoration(
-                          hintText: 'User',
-                          errorText: snapshot?.data?.isEmpty == true
-                              ? null
-                              : snapshot.data,
-                          icon: Icon(
-                            Icons.email,
-                          ),
+                  stream: widget.presenter.emailErrorStream,
+                  builder: (context, snapshot) {
+                    return TextField(
+                      decoration: InputDecoration(
+                        hintText: 'User',
+                        errorText: snapshot?.data?.isEmpty == true
+                            ? null
+                            : snapshot.data,
+                        icon: Icon(
+                          Icons.email,
                         ),
-                        onChanged: widget.presenter.validateEmail,
-                      );
-                    }),
+                      ),
+                      onChanged: widget.presenter.validateEmail,
+                    );
+                  },
+                ),
                 StreamBuilder<String>(
-                    stream: widget.presenter.passwordErrorStream,
-                    builder: (context, snapshot) {
-                      return TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          errorText: snapshot?.data?.isEmpty == true
-                              ? null
-                              : snapshot.data,
-                          icon: Icon(
-                            Icons.lock,
-                          ),
+                  stream: widget.presenter.passwordErrorStream,
+                  builder: (context, snapshot) {
+                    return TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        errorText: snapshot?.data?.isEmpty == true
+                            ? null
+                            : snapshot.data,
+                        icon: Icon(
+                          Icons.lock,
                         ),
-                        onChanged: widget.presenter.validatePassword,
-                      );
-                    }),
+                      ),
+                      onChanged: widget.presenter.validatePassword,
+                    );
+                  },
+                ),
                 StreamBuilder<bool>(
-                    stream: widget.presenter.isValidFormStream,
-                    builder: (context, snapshot) {
-                      return ElevatedButton(
-                        onPressed: snapshot.data == true
-                            ? widget.presenter.auth
-                            : null,
-                        child: Text('Login'),
-                      );
-                    }),
+                  stream: widget.presenter.isValidFormStream,
+                  builder: (context, snapshot) {
+                    return ElevatedButton(
+                      onPressed:
+                          snapshot.data == true ? widget.presenter.auth : null,
+                      child: Text('Login'),
+                    );
+                  },
+                ),
                 TextButton(
                   onPressed: () {},
                   child: Text(R.strings.addAccount),

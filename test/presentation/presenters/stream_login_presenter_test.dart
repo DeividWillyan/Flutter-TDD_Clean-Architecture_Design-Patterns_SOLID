@@ -34,7 +34,9 @@ void main() {
     validation = ValidationSpy();
     authentication = AuthenticationSpy();
     sut = StreamLoginPresenter(
-        validation: validation, authentication: authentication);
+      validation: validation,
+      authentication: authentication,
+    );
     email = faker.internet.email();
     password = faker.internet.password();
 
@@ -149,7 +151,8 @@ void main() {
 
     expectLater(sut.isLoadingStream, emits(false));
     sut.mainErrorStream.listen(
-        expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
+      expectAsync1((error) => expect(error, 'Credenciais inválidas.')),
+    );
 
     await sut.auth();
   });

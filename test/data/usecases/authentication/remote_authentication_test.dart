@@ -20,9 +20,10 @@ void main() {
       {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
 
   PostExpectation mockRequest() => when(httpClient.request(
-      url: anyNamed('url'),
-      method: anyNamed('method'),
-      body: anyNamed('body')));
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+      ));
 
   void mockHttpData(Map data) => mockRequest().thenAnswer((_) async => data);
 
@@ -33,7 +34,9 @@ void main() {
     url = faker.internet.httpUrl();
     sut = RemoteAuthentication(httpClient: httpClient, url: url);
     params = AuthenticationParams(
-        email: faker.internet.email(), secret: faker.internet.password());
+      email: faker.internet.email(),
+      secret: faker.internet.password(),
+    );
     mockHttpData(mockValidData());
   });
 
@@ -71,14 +74,16 @@ void main() {
     expect(future, throwsA(DomainError.unexpected));
   });
 
-  test('Should throw InvalidCredentialsError if HttpClient returns 401',
-      () async {
-    mockHttpError(HttpError.unauthorized);
+  test(
+    'Should throw InvalidCredentialsError if HttpClient returns 401',
+    () async {
+      mockHttpError(HttpError.unauthorized);
 
-    final future = sut.auth(params);
+      final future = sut.auth(params);
 
-    expect(future, throwsA(DomainError.invalidCredentials));
-  });
+      expect(future, throwsA(DomainError.invalidCredentials));
+    },
+  );
 
   test('Should return Account if HttpClient returns 200', () async {
     final validData = mockValidData();
@@ -90,12 +95,13 @@ void main() {
   });
 
   test(
-      'Should throw UnexpectedError if HttpClient returns 200 with invalid data',
-      () async {
-    mockHttpData({'invalid_key': 'invalid_value'});
+    'Should throw UnexpectedError if HttpClient returns 200 with invalid data',
+    () async {
+      mockHttpData({'invalid_key': 'invalid_value'});
 
-    final future = sut.auth(params);
+      final future = sut.auth(params);
 
-    expect(future, throwsA(DomainError.unexpected));
-  });
+      expect(future, throwsA(DomainError.unexpected));
+    },
+  );
 }

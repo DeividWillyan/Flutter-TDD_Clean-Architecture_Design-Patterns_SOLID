@@ -4,7 +4,9 @@ import '../../../../ui/pages/pages.dart';
 import '../../factories.dart';
 
 LoginPresenter makeStreamLoginPresenter() => StreamLoginPresenter(
-    validation: makeLoginValidation(), authentication: makeAuthentication());
+      validation: makeLoginValidation(),
+      authentication: makeAuthentication(),
+    );
 
 LoginPresenter makeGetxLoginPresenter() => GetxLoginPresenter(
       validation: makeLoginValidation(),

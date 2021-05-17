@@ -25,17 +25,21 @@ void main() {
     await sut.save(account);
 
     verify(
-        saveSecureCacheStorage.saveSecure(key: 'token', value: account.token));
+      saveSecureCacheStorage.saveSecure(key: 'token', value: account.token),
+    );
   });
 
-  test('Should throw UnexpectedError if SaveSecureCacheStorage throws',
-      () async {
-    when(saveSecureCacheStorage.saveSecure(
-            key: anyNamed('key'), value: anyNamed('value')))
-        .thenThrow(Exception());
+  test(
+    'Should throw UnexpectedError if SaveSecureCacheStorage throws',
+    () async {
+      when(saveSecureCacheStorage.saveSecure(
+        key: anyNamed('key'),
+        value: anyNamed('value'),
+      )).thenThrow(Exception());
 
-    final result = sut.save(account);
+      final result = sut.save(account);
 
-    expect(result, throwsA(DomainError.unexpected));
-  });
+      expect(result, throwsA(DomainError.unexpected));
+    },
+  );
 }

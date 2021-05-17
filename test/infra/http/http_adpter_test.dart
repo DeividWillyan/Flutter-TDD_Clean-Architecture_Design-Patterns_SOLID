@@ -29,9 +29,13 @@ void main() {
 
   group('post', () {
     PostExpectation mockRequest() => when(
-        client.post(any, body: anyNamed('body'), headers: anyNamed('headers')));
-    void mockResponse(int statusCode,
-        {String body = '{"any_key":"any_value"}'}) {
+          client.post(any,
+              body: anyNamed('body'), headers: anyNamed('headers')),
+        );
+    void mockResponse(
+      int statusCode, {
+      String body = '{"any_key":"any_value"}',
+    }) {
       mockRequest().thenAnswer((_) async => Response(body, statusCode));
     }
 
@@ -48,10 +52,10 @@ void main() {
           .request(url: url, method: 'post', body: {"any_key": "any_value"});
 
       verify(client.post(
-        url,
+        Uri.parse(url),
         headers: {
           'content-type': 'application/json',
-          'accept': 'application/json'
+          'accept': 'application/json',
         },
         body: '{"any_key":"any_value"}',
       ));
@@ -101,14 +105,16 @@ void main() {
       expect(future, throwsA(HttpError.badRequest));
     });
 
-    test('Should return BadRequestError if post returns 400 with body empty',
-        () async {
-      mockResponse(400, body: '');
+    test(
+      'Should return BadRequestError if post returns 400 with body empty',
+      () async {
+        mockResponse(400, body: '');
 
-      final future = sut.request(url: url, method: 'post');
+        final future = sut.request(url: url, method: 'post');
 
-      expect(future, throwsA(HttpError.badRequest));
-    });
+        expect(future, throwsA(HttpError.badRequest));
+      },
+    );
 
     test('Should return UnauthorizedError if post returns 401', () async {
       mockResponse(401);
