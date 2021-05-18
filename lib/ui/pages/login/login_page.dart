@@ -15,7 +15,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   @override
-  Widget build(BuildContext context) {
+  // ignore: long-method
+  Widget build(context) {
     return Scaffold(
       body: Builder(
         builder: (context) {
@@ -103,8 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 TextButton(
-                  onPressed: () {},
                   child: Text(R.strings.addAccount),
+                  onPressed: () { null ;},
                 ),
               ],
             ),

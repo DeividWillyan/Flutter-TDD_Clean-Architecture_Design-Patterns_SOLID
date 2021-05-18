@@ -30,6 +30,7 @@ void main() {
   group('post', () {
     PostExpectation mockRequest() => when(
           client.post(any,
+              // ignore: prefer-trailing-comma
               body: anyNamed('body'), headers: anyNamed('headers')),
         );
     void mockResponse(
