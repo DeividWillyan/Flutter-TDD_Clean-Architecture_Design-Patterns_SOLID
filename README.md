@@ -4,12 +4,17 @@
 - [X] Clean Archtecture
 - [X] Design Patterns
     - [X] Adapter
+    - [X] Builder
+    - [X] Singleton
+    - [X] Decorator 
 - [X] Solid
-- [X] TDD
+- [X] TDD (Unit Test, Widget Test) 
 - [X] BDD
----
-- [ ] Modular - Used for Dependency Injection (DI) and Routers.
-- [ ] Hasura - Outher remote database API GraphQL.
-- [ ] Dio - Refactor HttpAdpter to use Dio.
-- [ ] Mobx - Used Mobx for state manager  x
-e
+- [X] GitHub Actions (CI/CD)
+    - [X] Check Format
+    - [X] Check Analyze
+    - [X] Check Test
+    - [X] Generate Dart Code Metrics 
+    - [X] Build APK release
+- [X] Custom Analysis Options (Lint)
+- [X] SonarQube Configuration 
