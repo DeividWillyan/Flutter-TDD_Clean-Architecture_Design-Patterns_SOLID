@@ -105,7 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextButton(
                   child: Text(R.strings.addAccount),
-                  onPressed: () { null ;},
+                  onPressed: () {
+                    null;
+                  },
                 ),
               ],
             ),
